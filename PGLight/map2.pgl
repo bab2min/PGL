@@ -1,0 +1,137 @@
+function Until(func, t)
+{
+	while(not func())
+	{
+		Wait(t);
+	}
+}
+
+function CreateTrigger(func)
+{
+	var trig = {"turn" = true, "func" = func};
+	return trig;
+}
+
+function AddTriggerEnter(player, region, enter, trig)
+{
+	AddEventEnter(player, region, enter, function()
+	{
+		if(trig.turn == true)
+		{
+			return trig.func(trig);
+		}
+	});
+}
+
+
+var gTime = 512;
+var mainData;
+var music;
+
+function init()
+{
+	mainData = GameLoadData("main");
+	if(mainData == null)
+	{
+		mainData = {};
+	}
+	PreloadTexture("SkyCubeMap.jpg");
+	PreloadTexture("SkyCubeMap2.jpg");
+	PreloadTexture("SkyCubeMap3.jpg");
+	music = SoundPlayMusic("Above Cloudsdale.ogg", true);
+	SoundSetVolume(music, 1);
+	EnvironmentApplySkyboxTexture("SkyCubeMap.jpg", 0);
+	EnvironmentApplyGlobalLight("Day", 0);
+	CameraApplyFree("F", 0);
+	RegionAttachCharacter("sparkleAround", "ts");
+	RegionAttachCharacter("pieAround", "pinkie");
+	RegionAttachCharacter("rarityAround", "rarity");
+}
+
+function start()
+{
+	EnvironmentApplySkyboxTexture("SkyCubeMap2.jpg", gTime);
+	EnvironmentApplyGlobalLight("Dusk", gTime);
+	M00();
+}
+
+function night()
+{
+	EnvironmentApplySkyboxTexture("SkyCubeMap3.jpg", gTime);
+	EnvironmentApplyGlobalLight("Night", gTime);
+}
+
+function peri()
+{
+}
+
+AddEventInitialize(init);
+AddEventPeriodic(2, peri);
+AddEventElapsed(0, start);
+AddEventElapsed(gTime, night);
+/*AddEventChange("", "coin", "start")*/
+
+var trigPieTalk = CreateTrigger(function(this)
+{
+	this.turn = false;
+	UIShowUI("meterbar", false);
+	SoundSetVolume(music, 0.3);
+	CharacterEnableMove("player", false);
+	var r = math.random(0, 1);
+	if(r == 0)
+	{
+		UIDisplayConversation("PP01");
+	}
+	else if(r == 1)
+	{
+		UIDisplayConversation("PP02");
+	}
+	CharacterEnableMove("player", true);
+	SoundSetVolume(music, 1);
+	UIShowUI("meterbar", true);
+	this.turn = true;
+});
+AddTriggerEnter("player", "pieAround", true, trigPieTalk);
+
+var trigRarityTalk = CreateTrigger(function(this)
+{
+	UIShowUI("meterbar", false);
+	SoundSetVolume(music, 0.3);
+	CharacterEnableMove("player", false);
+	UIDisplayConversation("RA01");
+	CharacterEnableMove("player", true);
+	SoundSetVolume(music, 1);
+	UIShowUI("meterbar", true);
+});
+AddTriggerEnter("player", "rarityAround", true, trigRarityTalk);
+
+var trigTalk = CreateTrigger(function(this)
+{
+	UIShowUI("meterbar", false);
+	SoundSetVolume(music, 0.3);
+	CharacterEnableMove("player", false);
+	CameraPushCamera();
+	CameraApplyFixed("T", 0);
+	UIDisplayConversation("RD01");
+	UIDisplayConversation("TS02");
+	UIDisplayConversation("RD02");
+	UIDisplayConversation("TS01");
+	Wait(8);
+	SoundSetVolume(music, 1);
+	CharacterEnableMove("player", true);
+	CameraPopCamera();
+	UIShowUI("meterbar", true);
+	mainData["money"] = 10;
+	GameSaveData("main", mainData);
+});
+AddTriggerEnter("player", "sparkleAround", true, trigTalk);
+
+function M00()
+{
+	UIDisplayConversation("M00_RD00");
+	UIDisplayConversation("M00_RD01");
+	UIDisplayConversation("M00_RD02");
+	UIDisplayConversation("M00_RD03");
+	Until(() : false, 2);
+	UIDisplayConversation("M00_RD04");
+}

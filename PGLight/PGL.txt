@@ -1,0 +1,109 @@
+
+<name_type> ::= <identifier> ("as" <type>)?
+
+<decl_var> ::= "var" <name_type> ("=" <expr>)?
+
+<decl_var_semi> ::= <decl_var> ";"
+
+<decl_func> ::= "function" <identifier> "(" (<name_type> ( "," <name_type>)*)? ")" ("as" <type>)?
+	"{" <sentence>* "}"
+
+<simple_sentence> ::= <call>
+	| <assign>
+
+<sentence> ::= <if>
+	| <for>
+	| <while>
+	| <return>
+	| <yield>
+	| <throw>
+	| <try>
+	| <continue>
+	| <break>
+	| <decl_var_semi>
+	| <decl_func>
+	| <simple_sentence>
+
+<import> ::= "import" <identifier> ";"
+
+<assign> ::= <lexpr> "=" <expr> ";"
+
+<lexpr> ::= <par_lexpr>  ( ("[" <expr> "]") | ("." <identifier>) )*
+
+<par_lexpr> ::= <identifier> | '(' <lexpr> ')'
+
+<call> ::= <expr> ";"
+
+<return> ::= "return" <expr> ";"
+
+<yield> ::= "yield" <expr> ";"
+
+<throw> ::= "throw" <expr> ";"
+
+<try> ::= "try" "{" <sentence>* "}" "catch" "(" <name_type> ")" "{" <sentence>* "}"
+
+<continue> ::= "continue" <literal>? ";"
+
+<break> ::= "break" <literal>? ";"
+
+<if> ::= "if" "(" <expr> ")" "{" <sentence>* "}"
+	("else" "if" "(" <expr> ")" "{" <sentence>* "}")*
+	("else" "{" <sentence>* "}")?
+
+<while> ::= "while" "(" <simple_sentence> ")"
+	"{" <sentence>* "}"
+	("done" "{" <sentence>* "}")?
+	("else" "{" <sentence>* "}")?
+
+<for_basic> ::= <decl_var> ";" <expr> ";" <simple_sentence>
+<for_iter> ::= <decl_var> "in" <expr>
+
+<for> ::= "for" "(" <for_basic> | <for_iter> ")"
+	"{" <sentence>* "}"
+
+
+<expr> ::= <not_expr>
+
+<not_expr> ::= <or_expr>
+	| "not" <not_expr>
+
+<or_expr> ::= <and_expr> ("or" <and_expr>)*
+
+<and_expr> ::= <cmp_expr> ("and" <cmp_expr>)*
+
+<cmp_op> ::= "=="
+	| "!="
+	| ">"
+	| "<"
+	| ">="
+	| "<="
+
+<cmp_expr> ::= <add_expr> ( <cmp_op> <add_expr>)?
+
+<add_expr> ::= <mul_expr> ( ("+" | "-") <mul_expr>)*
+
+<mul_expr> ::= <sign_expr> ( ("*" | "/")  <sign_expr>)*
+
+<sign_expr> ::= <pow_expr>
+	| "-"? <sign_exp>
+
+<pow_expr> ::= (<a_expr> "^")* <a_expr>
+
+<a_expr> ::= <par_expr>
+	( ("[" <expr> "]") | ("." <identifier>) | ( "(" ( <expr> ("," <expr>)* )? ")" ))*
+
+<par_expr> ::= <literal> | <identifier> | "this"
+	| '(' <expr> ')' | <lambda_expr> | <function_expr>
+
+<literal> ::= <simple_literal>
+	| <array_literal>
+	| <dict_literal>
+
+<array_literal> ::= "[" ( <expr> ("," <expr>)* )? "]"
+
+<dict_literal> ::= "{" ( <expr> '=' <expr> ("," <expr> '=' <expr>)* )? "}"
+
+<lambda_expr> ::= <name_type>  | ( "(" (<name_type> ( "," <name_type>)*)? ")" )  ":" <expr>
+
+<function_expr> ::= "function" "(" (<name_type> ( "," <name_type>)*)? ")" ("as" <type>)?
+	"{" <sentence>* "}"

@@ -1,0 +1,157 @@
+/*
+Example1 : Hello World
+*/
+print("\nEx1 : Hello World\n");
+print("Hello World\n");
+
+/*
+Example2 : Inner function and closure
+*/
+
+print("\nEx2 : Inner function and closure\n");
+function test()
+{
+	function idt(x)
+	{
+		return x;
+	}
+	var a = 1;
+	function inner()
+	{
+		a = a + 1;
+		print("a: ", idt(a), "\n");
+	}
+	function printer()
+	{
+		print("a: ", a, "\n");
+	}
+	
+	function()
+	{
+		a = a + 1;
+	}();
+	
+	printer();
+	inner();
+	printer();
+	inner();
+	printer();
+	print("a: ", a, "\n");
+}
+test();
+
+/*
+Example 3 : Lambda expression and for loop
+*/
+
+print("\nEx3 : Lambda expression and for loop\n");
+function f(a, b, c)
+{
+	return x:a*x^2+b*x+c;
+}
+
+function prints(a, b, f)
+{
+	for(; a < b; a = a + 1)
+	{
+		if(a % 2 == 0)
+		{
+			continue;
+		}
+		var n = f(a);
+		print("f(", a, ") = ", f(a), "\n");
+	}
+	done
+	{
+		print("Done!" + "\n");
+	}
+	else
+	{
+		print("Break!\n");
+	}
+}
+
+var t = 1;
+var u = -2;
+var v = 1;
+
+prints(0, 25, f(t, u, v));
+
+/*
+Example 4 : Dictionary and for-in loop
+*/
+
+print("\nEx4 : Dictionary and for-in loop\n");
+
+function ()
+{
+	var key = "Key: ";
+	var value = ", Value: ";
+	for(var k, v in {1 = "a", 2 ="b", 4 = "c", 8 = "d", 16 = "e"})
+	{
+		var t = key + k + value + v + "\n";
+		print(t);
+	}
+}();
+
+/*
+Example 5 : Basic OS library and UTF-8
+*/
+
+print("\nEx5 : Basic OS library and UTF-8\n");
+var now = (os.now()).date();
+print(now["hour"], ":", now["minute"], ":", now["second"], " ", now["zone"], "\n");
+now = os.now().gmdate();
+print(now["hour"], ":", now["minute"], ":", now["second"], " ", now["zone"], "\n");
+print("안녕\n");
+
+/*
+Example 6 : Class and thread, yield
+*/
+
+print("\nEx6 : Class and thread, yield\n");
+function complex(r, i)
+{
+	var t = 1;
+	var ret = {};
+	ret.r = r;
+	ret.i = i;
+	ret.print = function()
+	{
+		print(this.r + " + " + this.i + "i");
+	};
+	ret.norm = function()
+	{
+		return this.r^2 + this.i^2;
+	};
+	ret.abs = function()
+	{
+		return this.norm() ^ 0.5;
+	};
+	ret.arg = function()
+	{
+		return math.atan2(this.r, this.i);
+	};
+	return ret;
+}
+
+function th()
+{
+	var a = 3;
+	var b = 4;
+	while(true)
+	{
+		var c = complex(a, b);
+		print(c.norm(), "\n");
+		print(c.abs(), "\n");
+		print(c.arg(), "\n");
+		a = a + 1;
+		b = b + 1;
+		yield a;
+	}
+}
+var th = thread(th);
+
+print("Thread State: ", th.status(), ", Result: ", th.resume(), "\n");
+print("Thread State: ", th.status(), ", Result: ", th.resume(), "\n");
+print("Thread State: ", th.status(), ", Result: ", th.resume(), "\n");
